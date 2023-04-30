@@ -24,6 +24,16 @@ def preprocess(data):
     return reviews
 
 
+def create_ngrams(text, n):
+    ngrams = []
+    for i in text:
+        tokens = i.split()
+        for j in range(len(tokens) - n + 1):
+            ngrams.append(' '.join(tokens[j:j + n]))
+
+    return ngrams
+
+
 # Bag of Words
 def bag_of_words(preprocessed_data):
     vectorizer = CountVectorizer()
@@ -68,14 +78,16 @@ def latent_dirichlet_allocation(documents):
     for i, document in enumerate(documents):
         print(f"Document {i + 1}: {document}")
         print(lda.get_document_topics(corpus[i]))
-
-
-if __name__ == '__main__':
+        
+        
+ if __name__ == '__main__':
     print(preprocess(corpus))
+    print(create_ngrams((preprocess(corpus)), 2))
     print('latent_dirichlet_allocation')
     latent_dirichlet_allocation(preprocess(corpus))
     print('latent_semantic_analysis + tf_idf')
     latent_semantic_analysis(tf_idf(preprocess(corpus)))
     print('latent_semantic_analysis + bag_of_words')
     latent_semantic_analysis(bag_of_words(preprocess(corpus)))
+
 
