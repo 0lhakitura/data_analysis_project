@@ -67,8 +67,8 @@ def latent_semantic_analysis(data):
 
 
 # Latent Dirichlet Allocation (LDA)
-def latent_dirichlet_allocation(documents):
- lda_model = LatentDirichletAllocation(n_components=2, learning_method='online')
+def latent_dirichlet_allocation(data):
+ lda_model = LatentDirichletAllocation(n_components=2, learning_method='online', random_state=42)
  lda = lda_model.fit_transform(data)
  index = 0
  for j in lda:
