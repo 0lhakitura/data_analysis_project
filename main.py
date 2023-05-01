@@ -3,9 +3,8 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.decomposition import TruncatedSVD
-from gensim import corpora
-from gensim.models import LdaModel
+from sklearn.decomposition import TruncatedSVD, LatentDirichletAllocation
+
 
 df = pd.read_csv('consumer_complaints.csv', on_bad_lines='skip')
 corpus = df['Consumer complaint narrative']
@@ -69,22 +68,23 @@ def latent_semantic_analysis(data):
 
 # Latent Dirichlet Allocation (LDA)
 def latent_dirichlet_allocation(documents):
-    dictionary = corpora.Dictionary([document.split() for document in documents])
-    corpus = [dictionary.doc2bow(document.split()) for document in documents]
-    lda = LdaModel(corpus, num_topics=2, id2word=dictionary, passes=10)
-    topics = lda.print_topics()
-    for topic in topics:
-        print(topic)
-    for i, document in enumerate(documents):
-        print(f"Document {i + 1}: {document}")
-        print(lda.get_document_topics(corpus[i]))
+ lda_model = LatentDirichletAllocation(n_components=2, learning_method='online')
+ lda = lda_model.fit_transform(data)
+ index = 0
+ for j in lda:
+    print("Review " + str(index) + ": ")
+    for i, topic in enumerate(lda[index]):
+        print("Topic ", i, ": ", topic * 100, "%")
+    index += 1
         
         
  if __name__ == '__main__':
     print(preprocess(corpus))
     print(create_ngrams((preprocess(corpus)), 2))
-    print('latent_dirichlet_allocation')
-    latent_dirichlet_allocation(preprocess(corpus))
+    print('latent_dirichlet_allocation + tf_idf')
+    latent_dirichlet_allocation(tf_idf(preprocess(corpus)))
+    print('latent_dirichlet_allocation + bag_of_words')
+    latent_dirichlet_allocation(bag_of_words(preprocess(corpus)))
     print('latent_semantic_analysis + tf_idf')
     latent_semantic_analysis(tf_idf(preprocess(corpus)))
     print('latent_semantic_analysis + bag_of_words')
