@@ -19,7 +19,7 @@ def preprocess(data):
     for review in data:
         words = word_tokenize(str(review))
         sentence = [w.lower() for w in words if w.isalpha()]
-        reviews.append(' '.join([word for word in sentence if word not in stop_words and word != 'nan']))
+        reviews.append(' '.join([word for word in sentence if word not in stop_words and word != 'nan' and len(word) > 3]))
     return reviews
 
 
