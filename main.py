@@ -34,8 +34,8 @@ def create_ngrams(text, n):
 
 
 # Bag of Words
-def bag_of_words(preprocessed_data):
-    vectorizer = CountVectorizer()
+def bag_of_words(preprocessed_data, min_df=0.5, max_df=3, max_features=None):
+    vectorizer = CountVectorizer(min_df=min_df, max_df=max_df, max_features=max_features)
     data = vectorizer.fit_transform(preprocessed_data)
     return data
     # data = pd.DataFrame(data.toarray(), columns=vectorizer.get_feature_names_out())
@@ -43,8 +43,8 @@ def bag_of_words(preprocessed_data):
 
 
 # TF-IDF
-def tf_idf(preprocessed_data):
-    vectorizer = TfidfVectorizer(min_df=1)
+def tf_idf(preprocessed_data, min_df=0.5, max_df=3, max_features=None):
+    vectorizer = TfidfVectorizer(min_df=min_df, max_df=max_df, max_features=max_features)
     data = vectorizer.fit_transform(preprocessed_data)
     return data
     # data = pd.DataFrame(data.toarray(), columns=vectorizer.get_feature_names_out())
